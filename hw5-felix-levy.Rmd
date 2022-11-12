@@ -1,0 +1,262 @@
+---
+title: "Untitled"
+output: html_document
+date: "2022-11-10"
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1)  
+
+<!-- -->
+
+            # here, we won't account for SD as we are only computing what we "expect" to have at the end of the time frame. So simply multiplying our investment by the avg, and adding the yearly investment will give us the right answer
+            stock = seq(0, 100, 5)
+            avg = c(5.09,5.4,5.7,6,6.29,6.57,6.84,7.11,7.37,7.62,7.87,8.11,8.34,8.56,8.78,8.99,9.19,9.38,9.57,9.74,9.91)
+            SD = c(4.03,3.99,4.11,4.37,4.74,5.21,5.74,6.32,6.94,7.59,8.25,8.94,9.64,10.35,11.07,11.8,12.54,13.28,14.03,14.79,15.55)
+            start = 1000
+            step = 360
+            value <- function(s, duration){
+            index = s/5
+            for (i in 1:duration){
+            start = start*((avg[index]/100)+1)
+            start = start + step
+            }
+            start
+            }
+            value(65, 10)
+
+            # I used an input of 65% stock and a duration of 10 years here, and my result is 76676.9 after 10 years
+
+1.2)
+
+        stockwithsd = seq(0, 100, 5)
+        avg = c(5.09,5.4,5.7,6,6.29,6.57,6.84,7.11,7.37,7.62,7.87,8.11,8.34,8.56,8.78,8.99,9.19,9.38,9.57,9.74,9.91)
+        SD = c(4.03,3.99,4.11,4.37,4.74,5.21,5.74,6.32,6.94,7.59,8.25,8.94,9.64,10.35,11.07,11.8,12.54,13.28,14.03,14.79,15.55)
+        start = 1000
+        step = 360
+        value <- function(s, duration){
+        index = s/5
+        for (i in 1:duration){
+        start = start*((rnorm(n=1, m = avg[index], sd = SD[index])/100)+1)
+        start = start + step
+        }
+        start
+        }
+        value(65, 10)
+
+        # We use the same function as previously, but modify the avg return for each year using a standard deviation in-built function (rnorm)
+
+3 and 4)  
+
+<!-- -->
+
+```{r}
+library(ggpubr)
+library(ggplot2)
+library(tidyverse)
+    library(lubridate)
+        stockwithsd = seq(0, 100, 5)
+        avg = c(5.09,5.4,5.7,6,6.29,6.57,6.84,7.11,7.37,7.62,7.87,8.11,8.34,8.56,8.78,8.99,9.19,9.38,9.57,9.74,9.91)
+        SD = c(4.03,3.99,4.11,4.37,4.74,5.21,5.74,6.32,6.94,7.59,8.25,8.94,9.64,10.35,11.07,11.8,12.54,13.28,14.03,14.79,15.55)
+        step = 360
+        value <- function(s, duration){
+        end = c()
+        end1=0
+        end2=0
+        end3=0
+        end4=0
+        end5=0
+        end6=0
+        end7=0
+        end8=0
+        end9=0
+        end10=0
+        plotsimu = ggplot()
+        simulations <- data.frame(matrix(ncol = 100, nrow = 11))
+        simulations[1,]=1000
+        simulations$Year = seq(0,10,1)
+        index = s/5
+        for (j in 1:100){
+          countend=0
+        start = 1000
+        line = c()
+        for (i in 1:duration){
+        start = start*((rnorm(n=1, m = avg[index], sd = SD[index])/100)+1)
+        start = start + step
+        line = append(line, start)
+        if (start >= 5000 & countend==0){
+          countend = countend +1
+        end = append(end, i)
+        if(i == 1){
+          end1 = end1+1
+        }
+        if(i == 2){
+          end2 = end2+1
+        }
+        if(i == 3){
+          end3 = end3+1
+        }
+        if(i == 4){
+          end4 = end4+1
+        }
+        if(i == 5){
+          end5 = end5+1
+        }
+        if(i == 6){
+          end6 = end6+1
+        }
+        if(i == 7){
+          end7 = end7+1
+        }
+        if(i == 8){
+          end8 = end8+1
+        }
+        if(i == 9){
+          end9 = end9+1
+        }
+        if(i == 10){
+          end10 = end10+1
+        }
+        }
+        }
+        simulations[2:11,j]=line
+        }
+        output = c(start, end)
+        View(simulations)
+    plotsimu=ggplot()+geom_line(data = simulations, mapping = aes(x=Year,y=X1))
+ 
+    
+    
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X2))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X3))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X4))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X5))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X6))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X7))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X8))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X9))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X10))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X11))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X12))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X13))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X14))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X15))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X16))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X17))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X18))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X19))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X20))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X21))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X22))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X23))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X24))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X25))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X26))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X27))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X28))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X29))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X30))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X31))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X32))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X33))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X34))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X35))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X36))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X37))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X38))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X39))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X40))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X41))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X42))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X43))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X44))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X45))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X46))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X47))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X48))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X49))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X50))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X51))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X52))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X53))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X54))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X55))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X56))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X57))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X58))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X59))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X60))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X61))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X62))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X63))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X64))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X65))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X66))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X67))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X68))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X69))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X70))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X71))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X72))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X73))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X74))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X75))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X76))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X77))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X78))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X79))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X80))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X81))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X82))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X83))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X84))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X85))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X86))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X87))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X88))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X89))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X90))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X91))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X92))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X93))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X94))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X95))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X96))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X97))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X98))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X99))
+     plotsimu = plotsimu +geom_line(data = simulations, mapping = aes(x=Year,y=X100))
+     plotsimu = plotsimu + theme_minimal()+labs(x="Year",y="Money",
+               title="Evolution of amount per year over 100 simulations")
+avgtime=Reduce("+", end)/100
+plotsimu = plotsimu + geom_vline(xintercept=avgtime, linetype='dashed',col='blue')+geom_hline(yintercept = 5000,linetype='dashed',col='blue')+geom_text(aes(x=avgtime, label="avg time", y=0), colour="blue")
+        proba <- data.frame(matrix(ncol = 11,nrow = 1))
+        proba[1]=0
+        proba[2]=end1
+        proba[3]=end1+end2
+        proba[4]=end1+end2+end3
+        proba[5]=end1+end2+end3+end4
+        proba[6]=end1+end2+end3+end4+end5
+        proba[7]=end1+end2+end3+end4+end5+end6
+        proba[8]=end1+end2+end3+end4+end5+end6+end7
+        proba[9]=end1+end2+end3+end4+end5+end6+end7+end8
+        proba[10]=end1+end2+end3+end4+end5+end6+end7+end8+end9
+        proba[11]=end1+end2+end3+end4+end5+end6+end7+end8+end9+end10
+        proba=proba/100
+        proba=rbind(proba, seq(0,10,1))
+        proba=t(proba)
+        proba<-as.data.frame(proba)
+        plotproba=ggplot(proba, aes(x = V2, y=V1))+ geom_col()+labs(x="Year",y="probability",
+               title="Probabiliy of reaching target per year") + theme_minimal()
+        
+        ggarrange(plotsimu,plotproba)
+        }
+      value(30, 10)
+```
+
+
